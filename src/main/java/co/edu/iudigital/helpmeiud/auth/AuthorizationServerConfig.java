@@ -16,7 +16,10 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Configuration
 @EnableAuthorizationServer
@@ -88,15 +91,25 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        KeyPair keyPair = generateKeyPair();
+        converter.setKeyPair(keyPair);
+        return converter;
+    }
+
+    @Bean
     public JwtTokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setSigningKey(JwtConfig.RSA_PRIVATE);
-        jwtAccessTokenConverter.setVerifierKey(JwtConfig.RSA_PUBLIC);
-        return jwtAccessTokenConverter;
+    private KeyPair generateKeyPair() {
+        try {
+            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            return keyPairGenerator.generateKeyPair();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al generar las llaves", e);
+        }
     }
 }

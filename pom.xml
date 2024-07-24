@@ -12,7 +12,7 @@
 	<artifactId>helpmeiud</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>helpmeiud</name>
-	<description>API REST HelpmeIUD</description>
+	<description>API REST Helpmeiud</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -47,6 +47,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 			<version>3.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>9.22</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
